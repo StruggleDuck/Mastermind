@@ -1,0 +1,11 @@
+TODO 
++ Make working bot
++ Fix using input number twice
++ Make user interface
++ standardize the different versions
++ remove unneeded code
++ convert arrays to array lists for consistency
++ remove make a standardized method for all different game versions to use to reduce project size
++ loop everything
++ add mode for playing against the bot
++ add in a tutorial (Rules/Guide will do if not enough time)
