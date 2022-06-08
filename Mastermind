@@ -16,8 +16,164 @@ TODO
 + loop everything
 + add mode for playing against the bot
 + add in a tutorial (Rules/Guide will do if not enough time)
-*/
+ */
+
+
 public class Games {
+
+	static ArrayList<Integer> checker(int length, ArrayList<Integer> code, int[] bot){
+
+		List<Integer> codetemp = new ArrayList<Integer>(code);
+
+		ArrayList<Integer> result = new ArrayList<Integer>();
+
+		// checking if number is in exact spot
+		for (int i = 1; i < (length + 1); i++) {
+
+			if (codetemp.get(i - 1) == bot[i - 1]) {
+
+				System.out.println("2");
+				bot[i-1] = 9;
+				result.add(2);
+
+			}
+		}
+		// checks if it is in
+		for (int i = 1; i < (length + 1); i++) {
+
+			if (codetemp.contains(bot[i - 1])) {
+
+				bot[i-1] = 9;
+				result.add(1);
+
+			}
+		}
+
+		System.out.println(codetemp);
+		while (result.size() != codetemp.size()) {
+
+			result.add(0);
+
+		}
+
+		Collections.sort(result, Collections.reverseOrder());
+		System.out.println(result);
+		System.out.println(codetemp);
+		System.out.println("Ending");
+
+		return (result);
+	}
+
+
+
+
+	static void customold(ArrayList<Integer> code, int length){
+
+
+		int sum = 0;
+
+		while (sum != (9 * length)) {
+
+			sum = 0;
+
+			ArrayList<Integer> result = new ArrayList<Integer>();
+
+			int[] bot = new int[length];
+
+
+			Scanner scan = new Scanner(System.in);
+
+			System.out.println("input number");
+
+			int pin = scan.nextInt();
+
+			String number = String.valueOf(pin);
+
+			for (int i = 0; i < number.length(); i++) {
+
+				int j = Character.digit(number.charAt(i), 10);
+
+				bot[i] = j;
+
+				System.out.println("digit: " + j);
+			}
+			// FROM HERE DOWN *******************************************************************************
+
+			checker(length, code, bot);
+
+			List<Integer> codetemp = new ArrayList<Integer>(code);
+
+			// int[] bot = {1, 1, 2, 2};
+
+			// all code below this point is cursed, and I have no idea how any
+			// of it works. Good luck Future me
+			// Checking if it matches exact position
+
+
+			// checking if number is in exact spot
+
+			for (int i = 1; i < (length + 1); i++) {
+
+				if (codetemp.get(i - 1) == bot[i - 1]) {
+					System.out.println("2");
+
+
+					bot[i-1] = 9;
+
+
+					result.add(2);
+
+					System.out.println(codetemp);
+				}
+
+			}
+			// checks if it is in
+			for (int i = 1; i < (length + 1); i++) {
+
+				System.out.println("Round: " + i);
+				System.out.println("Guess: " + bot[i - 1]);
+				System.out.println("Checker: " + codetemp);
+				System.out.println("");
+
+				if (codetemp.contains(bot[i - 1])) {
+
+					System.out.println("Contains? : Yes");
+
+					bot[i-1] = 9;
+
+
+					result.add(1);
+
+
+				} else {
+
+					System.out.println("Contains? : False");
+					System.out.println("");
+
+				}
+
+				System.out.println(result);
+			}
+			System.out.println(codetemp);
+			while (result.size() != codetemp.size()) {
+
+				result.add(0);
+
+			}
+
+			Collections.sort(result, Collections.reverseOrder());
+			System.out.println(result);
+			System.out.println(codetemp);
+
+			for (int i = 0; i < codetemp.size(); i++)
+				sum += codetemp.get(i);
+
+		}
+
+		System.out.println("you win!");
+		main(null);
+
+	}
 
 	static void player(ArrayList<Integer> code) {
 
@@ -93,6 +249,7 @@ public class Games {
 
 	static void bot(ArrayList<Integer> code) {
 
+
 		int turn = 1;
 		int skip = 1;
 		int sum = 0;
@@ -109,9 +266,9 @@ public class Games {
 			System.out.println("input number");
 			int pin = scan.nextInt();
 			String number = String.valueOf(pin);
-			
+
 			for (int i = 0; i < number.length(); i++) {
-				
+
 				int j = Character.digit(number.charAt(i), 10);
 				bot[i] = j;
 				System.out.println("digit: " + j);
@@ -119,8 +276,8 @@ public class Games {
 
 			List<Integer> codetemp = new ArrayList<Integer>(code);
 
-		
-			
+
+
 			// all code below this point is cursed, and I have no idea how any
 			// of it works. Good luck Future me
 			// Checking if it matches exact position
@@ -169,25 +326,27 @@ public class Games {
 		main(null);
 	}
 
-	
-	
+
+
 	// Custom is the most updated version of the game
-	static void custom(ArrayList<Integer> code, int length) { 
 
-		int turn = 1;
-		int skip = 1;
+
+	//Most Up to date, all other gamemodes are very outdated and need to be updated.
+	static void custom(ArrayList<Integer> code, int length, int turns) { 
+
 		int sum = 0;
+		int turn = 0;
 
-		while (sum != (9 * length)) {
+
+		while (sum != (length) && turn != turns) {
+
+			turn ++;
+
+
 
 			sum = 0;
 
-			ArrayList<Integer> result = new ArrayList<Integer>();
-
 			int[] bot = new int[length];
-
-			// old code
-			// int[] bot = {0,0,0,0};
 
 			Scanner scan = new Scanner(System.in);
 
@@ -196,82 +355,37 @@ public class Games {
 			int pin = scan.nextInt();
 
 			String number = String.valueOf(pin);
+
 			for (int i = 0; i < number.length(); i++) {
 
 				int j = Character.digit(number.charAt(i), 10);
-
 				bot[i] = j;
-
 				System.out.println("digit: " + j);
 			}
 
-			List<Integer> codetemp = new ArrayList<Integer>(code);
-
-			// int[] bot = {1, 1, 2, 2};
-
-			// all code below this point is cursed, and I have no idea how any
-			// of it works. Good luck Future me
-			// Checking if it matches exact position
-
-			// For future me: bug is caused by it checking if code contains a
-			// number regardless of position, and because the incorrect numbers
-			// do not get swapped, when there is duplicates it will cause it to
-			// reuse a number twice for both exact and included numbers.
-			for (int i = 1; i < (length + 1); i++) {
-
-				if (codetemp.get(i - 1) == bot[i - 1]) {
-					System.out.println("2");
-					// code.set(i, 9);
-					codetemp.set(codetemp.indexOf(bot[i - 1]), 9);
-					result.add(2);
-					skip = 1;
-					System.out.println(codetemp);
-				}
-
-			}
-			// checks if it is in
-			for (int i = 1; i < (length + 1); i++) {
-
-				System.out.println("Round: " + i);
-				System.out.println("Guess: " + bot[i - 1]);
-				System.out.println("Checker: " + codetemp);
-				System.out.println("");
-
-				if (codetemp.contains(bot[i - 1])) {
-
-					System.out.println("Contains? : Yes");
-					codetemp.set(codetemp.indexOf(bot[i - 1]), 0);
-					// code.set(i-1, 9);
-					result.add(1);
-					skip = 1;
-
-				} else {
-
-					System.out.println("Contains? : False");
-					System.out.println("");
-
-				}
-
-				System.out.println(result);
-			}
-			System.out.println(codetemp);
-			while (result.size() != codetemp.size()) {
-
-				result.add(0);
-
-			}
-
-			Collections.sort(result, Collections.reverseOrder());
+			ArrayList<Integer> result = new ArrayList<Integer>();
+			result = (checker(length, code, bot));
 			System.out.println(result);
-			System.out.println(codetemp);
+			for (int i = 0; i < length; i++){
 
-			for (int i = 0; i < codetemp.size(); i++)
-				sum += codetemp.get(i);
+				if (result.get(i) == 2){
 
+					sum++;
+					System.out.println(i);
+
+				}
+			}
 		}
 
-		System.out.println("you win!");
-		main(null);
+		if(sum == length){
+			System.out.println("You Win!");
+			main(null);
+
+		}else{
+			System.out.println("You Loose!");
+			main(null);
+		}
+
 	}
 
 	static void codegen(int mode) {
@@ -281,7 +395,11 @@ public class Games {
 
 		if (mode == 1) {
 
+			System.out.println("Input Code Length:");
 			int length = scan.nextInt();
+			System.out.println("Input Number Of Turns");
+			int turns = scan.nextInt();
+
 			ArrayList<Integer> code = new ArrayList<Integer>();
 
 			for (int i = 0; i < length; i++) {
@@ -291,7 +409,7 @@ public class Games {
 
 			}
 
-			custom(code, length);
+			custom(code, length, turns);
 
 		}
 
