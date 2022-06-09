@@ -4,20 +4,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-/*
-TODO 
-+ Make working bot
-+ Fix using input number twice
-+ Make user interface
-+ standardize the different versions
-+ remove unneeded code
-+ convert arrays to array lists for consistency
-+ remove make a standardized method for all different game versions to use to reduce project size
-+ loop everything
-+ add mode for playing against the bot
-+ add in a tutorial (Rules/Guide will do if not enough time)
- */
-
 
 public class Games {
 
@@ -32,24 +18,26 @@ public class Games {
 
 			if (codetemp.get(i - 1) == bot[i - 1]) {
 
-				System.out.println("2");
+			System.out.println("2");
+				codetemp.set(codetemp.indexOf(bot[i - 1]), 10);
 				bot[i-1] = 9;
 				result.add(2);
-
+				
 			}
 		}
 		// checks if it is in
 		for (int i = 1; i < (length + 1); i++) {
 
 			if (codetemp.contains(bot[i - 1])) {
-
+				
+				codetemp.set(codetemp.indexOf(bot[i - 1]), 10);
 				bot[i-1] = 9;
 				result.add(1);
-
+				
 			}
 		}
 
-		System.out.println(codetemp);
+		
 		while (result.size() != codetemp.size()) {
 
 			result.add(0);
@@ -57,15 +45,12 @@ public class Games {
 		}
 
 		Collections.sort(result, Collections.reverseOrder());
-		System.out.println(result);
-		System.out.println(codetemp);
-		System.out.println("Ending");
+		//System.out.println(result);
+		//System.out.println(codetemp);
+		//System.out.println("Ending");
 
 		return (result);
 	}
-
-
-
 
 	static void customold(ArrayList<Integer> code, int length){
 
@@ -329,20 +314,15 @@ public class Games {
 
 
 	// Custom is the most updated version of the game
-
-
 	//Most Up to date, all other gamemodes are very outdated and need to be updated.
 	static void custom(ArrayList<Integer> code, int length, int turns) { 
 
 		int sum = 0;
 		int turn = 0;
 
-
 		while (sum != (length) && turn != turns) {
 
 			turn ++;
-
-
 
 			sum = 0;
 
@@ -360,7 +340,7 @@ public class Games {
 
 				int j = Character.digit(number.charAt(i), 10);
 				bot[i] = j;
-				System.out.println("digit: " + j);
+				//System.out.println("digit: " + j);
 			}
 
 			ArrayList<Integer> result = new ArrayList<Integer>();
@@ -371,7 +351,7 @@ public class Games {
 				if (result.get(i) == 2){
 
 					sum++;
-					System.out.println(i);
+					//System.out.println(i);
 
 				}
 			}
@@ -394,7 +374,7 @@ public class Games {
 		Random rand = new Random();
 
 		if (mode == 1) {
-
+			System.out.println("Custom Mode Setup");
 			System.out.println("Input Code Length:");
 			int length = scan.nextInt();
 			System.out.println("Input Number Of Turns");
@@ -405,10 +385,11 @@ public class Games {
 			for (int i = 0; i < length; i++) {
 
 				code.add(rand.nextInt(8) + 1);
-				System.out.println(code);
+				
 
 			}
-
+			System.out.println("Generated Code = ");
+			System.out.println(code);
 			custom(code, length, turns);
 
 		}
@@ -447,7 +428,11 @@ public class Games {
 		Scanner scan = new Scanner(System.in);
 
 		System.out.println("Mode");
-
+		System.out.println("1: Custom Mode");
+		System.out.println("2: Bot Mode");
+		System.out.println("3: Standard"); 
+		System.out.println("*Note: Only custom mode is working correctly right now, and bot mode has not been created yet");
+		
 		mode = scan.nextInt();
 
 		if (mode == 1 || mode == 2 || mode == 3) {
