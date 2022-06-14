@@ -3,10 +3,110 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-
-
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Arrays;
 public class Games {
 
+	//no idea how I am going to do this. Want to fake an AI, but unsure how to do it
+
+	static void help(){
+		Scanner scan = new Scanner(System.in);
+		String cont;
+		System.out.println("After entering your guess, you will see something simlar to this:");
+		System.out.println("Turn 1");
+		System.out.println("	Guess: [3,5,6,1]	Result: [2,1,1,0]");
+		System.out.println("The guess section shows your guesses");
+		System.out.println("The result section shows the results of your guess");
+		System.out.println("The result section can be read as follows:");
+		System.out.println("	[2] = One of the digits in your guess is in the code and in the correct position");
+		System.out.println("	[1] = One of the digits in your guess is in the code, but not the correct position");
+		System.out.println("	[0] = One of the digits in your guess not located inside of the code");
+		
+		System.out.println("Press Enter To Continue . . . .");
+		cont = scan.nextLine();
+		
+		System.out.println("Example: ");
+		System.out.println("	Guess: [3,5,6,1]	Result: [2,2,1,0]");
+		System.out.println("");
+		System.out.println("Based off off the results, we know that 2 of the numbers guessed are correct, ");
+		System.out.println("1 is not in the correct position, and 1 is incorrect. However, do note that ");
+		System.out.println("the order of the results does not coorespond to the order of numbers guessed.");
+		System.out.println("results will always be displayed in the following format:");
+		System.out.println("");
+		System.out.println("Correct position [2] -> In code but inccorrect position [1] -> incorrect guess [0]");
+		System.out.println("*Also note that numbers can be repeated inside the code (1111 is a possible code)");
+		System.out.println("Press Enter To Continue . . . .");
+		cont = scan.nextLine();
+		main(null);
+	}
+	
+	
+	static int[]guess(int score, int[] pguess){
+		
+		Random rand = new Random();
+		 
+		int[] bot = new int[4];
+		
+		ArrayList<Integer> guess = new ArrayList<Integer>();
+
+		for (int i = 0; i < 4; i++) {
+
+			bot[i] = (rand.nextInt(6) + 1);	
+			//guess.add(rand.nextInt(6) + 1);
+		}
+		return bot;
+	}
+	
+	static ArrayList<int[]> guesses(ArrayList<Integer> code, int bmode){
+		
+		Random rand = new Random();
+		
+		int score = 0;
+		int cont = 0;
+		int [] pguess = {1,1,2,2};
+		int [] n = {0,0,0,0};
+		ArrayList<int[]> guesses = new ArrayList<int[]>();
+	
+		for (int i = 0; i < 5; i++){
+			
+			while (cont == 0){
+				
+				n = guess(score,pguess);
+				
+				
+				
+				cont = 1;
+			}
+			
+		 	pguess = n;
+		 	guesses.add(n);
+			
+		}
+		System.out.println("Guesses:");
+		System.out.println(guesses);
+	
+		return guesses;
+	}
+	
+
+	static void gui(ArrayList<ArrayList<Integer>> pastres, ArrayList<ArrayList<Integer>> pastguess, int turns){
+
+		
+		for (int i = 0; i<turns;i++){
+			System.out.println("Turn " + (i + 1));
+			System.out.print("	Guess :");
+			System.out.print(pastguess.get(i));
+			System.out.print("	Result :");
+			System.out.println(pastres.get(i));
+
+
+		}
+
+		
+	}
+	
+	
 	static ArrayList<Integer> checker(int length, ArrayList<Integer> code, int[] bot){
 
 		List<Integer> codetemp = new ArrayList<Integer>(code);
@@ -18,7 +118,7 @@ public class Games {
 
 			if (codetemp.get(i - 1) == bot[i - 1]) {
 
-			System.out.println("2");
+			//System.out.println("2");
 				codetemp.set(codetemp.indexOf(bot[i - 1]), 10);
 				bot[i-1] = 9;
 				result.add(2);
@@ -159,181 +259,56 @@ public class Games {
 		main(null);
 
 	}
-
-	static void player(ArrayList<Integer> code) {
-
-		int turn = 1;
-		int skip = 1;
-
-		while (1 == 1) {
-
-			ArrayList<Integer> result = new ArrayList<Integer>();
-
-			int[] bot = { 0, 0, 0, 0 };
-
-			Scanner scan = new Scanner(System.in);
-
-			System.out.println("input number");
-
-			int pin = scan.nextInt();
-
-			String number = String.valueOf(pin);
-			for (int i = 0; i < number.length(); i++) {
-
-				int j = Character.digit(number.charAt(i), 10);
-
-				bot[i] = j;
-
-				System.out.println("digit: " + j);
-			}
-
-			List<Integer> codetemp = new ArrayList<Integer>(code);
-
-			// int[] bot = {1, 1, 2, 2};
-
-			// all code below this point is cursed, and I have no idea how any
-			// of it works. Good luck Future me
-			// Checking if it matches exact position
-			for (int i = 1; i < 5; i++) {
-
-				if (codetemp.get(i - 1) == bot[i - 1]) {
-					System.out.println("2");
-					// code.set(i, 9);
-					codetemp.set(codetemp.indexOf(bot[i - 1]), 9);
-					result.add(2);
-					skip = 1;
-				}
-
-			}
-			// checks if it is in
-			for (int i = 1; i < 5; i++) {
-
-				if (codetemp.contains(bot[i - 1])) {
-
-					System.out.println("1");
-					codetemp.set(codetemp.indexOf(bot[i - 1]), 9);
-					// code.set(i-1, 9);
-					result.add(1);
-					skip = 1;
-				}
-
-				System.out.println(result);
-			}
-			System.out.println(codetemp);
-			while (result.size() != codetemp.size()) {
-
-				result.add(0);
-
-			}
-
-			Collections.sort(result, Collections.reverseOrder());
-			System.out.println(result);
-			System.out.println(codetemp);
-		}
-	}
-
-	static void bot(ArrayList<Integer> code) {
-
-
-		int turn = 1;
-		int skip = 1;
-		int sum = 0;
-
-		while (sum != (9 * 4)) {
-
-			sum = 0;
-			ArrayList<Integer> result = new ArrayList<Integer>();
-			int[] bot = new int[4];
-
-			// int[] bot = {0,0,0,0};
-
-			Scanner scan = new Scanner(System.in);
-			System.out.println("input number");
-			int pin = scan.nextInt();
-			String number = String.valueOf(pin);
-
-			for (int i = 0; i < number.length(); i++) {
-
-				int j = Character.digit(number.charAt(i), 10);
-				bot[i] = j;
-				System.out.println("digit: " + j);
-			}
-
-			List<Integer> codetemp = new ArrayList<Integer>(code);
-
-
-
-			// all code below this point is cursed, and I have no idea how any
-			// of it works. Good luck Future me
-			// Checking if it matches exact position
-			for (int i = 1; i < (5); i++) {
-
-				if (codetemp.get(i - 1) == bot[i - 1]) {
-					System.out.println("2");
-					// code.set(i, 9);
-					codetemp.set(codetemp.indexOf(bot[i - 1]), 9);
-					result.add(2);
-					skip = 1;
-				}
-
-			}
-			// checks if it is in
-			for (int i = 1; i < (5); i++) {
-
-				if (codetemp.contains(bot[i - 1])) {
-
-					System.out.println("1");
-					codetemp.set(codetemp.indexOf(bot[i - 1]), 0);
-					// code.set(i-1, 9);
-					result.add(1);
-					skip = 1;
-				}
-
-				System.out.println(result);
-			}
-			System.out.println(codetemp);
-			while (result.size() != codetemp.size()) {
-
-				result.add(0);
-
-			}
-
-			Collections.sort(result, Collections.reverseOrder());
-			System.out.println(result);
-			System.out.println(codetemp);
-
-			for (int i = 0; i < codetemp.size(); i++)
-				sum += codetemp.get(i);
-
-		}
-
-		System.out.println("you win!");
-		main(null);
-	}
-
-
-
-	// Custom is the most updated version of the game
-	//Most Up to date, all other gamemodes are very outdated and need to be updated.
-	static void custom(ArrayList<Integer> code, int length, int turns) { 
-
+	//very broken
+	static void bot(ArrayList<Integer> code, int length, int turns) {
+		Random rand = new Random();
 		int sum = 0;
 		int turn = 0;
-
+		
+		
+		
+		int[]bot = {1, 1, 2, 2};
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		ArrayList<Integer> wrong = new ArrayList<Integer>();
+		
+		int bmode = rand.nextInt(5) + 4;
+		System.out.println("bmode");
+		System.out.println(bmode);
+		
+		
 		while (sum != (length) && turn != turns) {
 
 			turn ++;
 
 			sum = 0;
 
-			int[] bot = new int[length];
+			
 
-			Scanner scan = new Scanner(System.in);
+			
+			if (turn ==1){
 
-			System.out.println("input number");
+				
+			}else{
+				
+			 
+				
+				for (int i = 0; i < 4; i++) {
 
-			int pin = scan.nextInt();
-
+					if(result.get(i)==2){
+						
+						
+					}else{
+				
+					}
+				}
+				
+			}
+			
+			
+			
+			// guessed code
+			int pin = 1;
+			
 			String number = String.valueOf(pin);
 
 			for (int i = 0; i < number.length(); i++) {
@@ -343,7 +318,7 @@ public class Games {
 				//System.out.println("digit: " + j);
 			}
 
-			ArrayList<Integer> result = new ArrayList<Integer>();
+			
 			result = (checker(length, code, bot));
 			System.out.println(result);
 			for (int i = 0; i < length; i++){
@@ -367,6 +342,83 @@ public class Games {
 		}
 
 	}
+	//Most Up to date, all other gamemodes are very outdated and need to be updated.
+	static void custom(ArrayList<Integer> code, int length, int turns) { 
+
+		int sum = 0;
+		int turn = 0;
+		
+		ArrayList<ArrayList<Integer>> pastres = new ArrayList<ArrayList<Integer>>();
+		
+		ArrayList<ArrayList<Integer>> pastguess = new ArrayList<ArrayList<Integer>>();
+	
+		
+		
+		while (sum != (length) && turn != turns) {
+
+			turn ++;
+
+			sum = 0;
+
+			int[] bot = new int[length];
+
+			Scanner scan = new Scanner(System.in);
+
+			System.out.println("input number");
+
+			int pin = scan.nextInt();
+
+			String number = String.valueOf(pin);
+
+			for (int i = 0; i < number.length(); i++) {
+
+				int j = Character.digit(number.charAt(i), 10);
+				bot[i] = j;
+				//System.out.println("digit: " + j);
+			}
+			
+			ArrayList<Integer> guess = new ArrayList<Integer>();
+			
+			for (int i: bot) {
+	            guess.add(Integer.valueOf(i));
+	        }
+			
+			ArrayList<Integer> result = new ArrayList<Integer>();
+			result = (checker(length, code, bot));
+	
+			
+			
+
+			
+			
+			pastres.add(result);
+			pastguess.add(guess);
+			
+			gui(pastres,pastguess, turn);
+			
+			for (int i = 0; i < length; i++){
+
+				if (result.get(i) == 2){
+
+					sum++;
+					//System.out.println(i);
+
+				}
+			}
+		}
+		
+		
+		
+		if(sum == length){
+			System.out.println("You Win!");
+			main(null);
+
+		}else{
+			System.out.println("You Lost!");
+			main(null);
+		}
+
+	}
 
 	static void codegen(int mode) {
 
@@ -384,7 +436,7 @@ public class Games {
 
 			for (int i = 0; i < length; i++) {
 
-				code.add(rand.nextInt(8) + 1);
+				code.add(rand.nextInt(6) + 1);
 				
 
 			}
@@ -399,11 +451,12 @@ public class Games {
 			ArrayList<Integer> code = new ArrayList<Integer>();
 
 			for (int i = 0; i < 4; i++) {
-				code.add(rand.nextInt(8) + 1);
+				code.add(rand.nextInt(6) + 1);
 				System.out.println(code);
 			}
 
-			bot(code);
+			guesses(code,4);
+			bot(code,4,8);
 
 		}
 
@@ -412,17 +465,37 @@ public class Games {
 			ArrayList<Integer> code = new ArrayList<Integer>();
 
 			for (int i = 0; i < 4; i++) {
-				code.add(rand.nextInt(8) + 1);
+				code.add(rand.nextInt(6) + 1);
 				System.out.println(code);
 			}
 
-			player(code);
+			custom(code,4,8);
 
 		}
 	}
 
+	static void rules(){
+		Scanner scan = new Scanner(System.in);
+		String cont;
+		System.out.println("--- Rules ---");
+		System.out.println("");
+		System.out.println("Players must try to guess a randomly generated code within a certain number of attempts.");
+		System.out.println("");
+		System.out.println("Upon guessing, the player will be informed of how many numbers they have guessed correctly,");
+		System.out.println("and in the correct position, as well as how many numbers are");
+		System.out.println("contained within the code, but were not guessed in the correct position");
+		System.out.println("");
+		System.out.println("If the player looses if they do not guess the code in time, and");
+		System.out.println("if they manage to guess correctly, they win!");
+		System.out.println("");
+		System.out.println("Press Enter To Continue . . . .");
+		cont = scan.nextLine();
+		
+		main(null);
+	}
+	
 	public static void main(String[] args) {
-
+		
 		int mode;
 
 		Scanner scan = new Scanner(System.in);
@@ -431,24 +504,37 @@ public class Games {
 		System.out.println("1: Custom Mode");
 		System.out.println("2: Bot Mode");
 		System.out.println("3: Standard"); 
+		System.out.println("4: Rules"); 
+		System.out.println("5: Help");
 		System.out.println("*Note: Only custom mode is working correctly right now, and bot mode has not been created yet");
+		
 		
 		mode = scan.nextInt();
 
-		if (mode == 1 || mode == 2 || mode == 3) {
+		if (mode == 1 || mode == 2 || mode == 3 || mode == 4 || mode == 5) {
 
 		} else {
 
-			while (mode != 1 && mode != 2 && mode != 3) {
+			while (mode != 1 && mode != 2 && mode != 3 && mode != 4 && mode != 5) {
 				System.out.println("Input");
 				mode = scan.nextInt();
-
 			}
-
 		}
-
-		codegen(mode);
-
+		
+		if (mode == 1 || mode == 2 || mode == 3) {
+			codegen(mode);
+		}else{
+			if (mode == 4){
+				rules();
+			}else{
+				
+				help();
+				
+			}
+		}
+	
+	
+	
 	}
 
 }
