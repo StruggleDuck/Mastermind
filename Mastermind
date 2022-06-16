@@ -8,7 +8,221 @@ import java.util.Iterator;
 import java.util.Arrays;
 public class Games {
 
-	//no idea how I am going to do this. Want to fake an AI, but unsure how to do it
+	public static void wait(int ms)
+	{
+	    try
+	    {
+	        Thread.sleep(ms);
+	    }
+	    catch(InterruptedException ex)
+	    {
+	        Thread.currentThread().interrupt();
+	    }
+	}
+
+	// Blackjack ***********************************************************************************************
+	//gets value of card from random card
+	public static int value(Integer num){
+
+		while (num > 13){
+
+			num = (num - 13);
+
+		}
+
+		int[] cards = {11,2,3,4,5,6,7,8,9,10,10,10,10};
+
+		return (cards[num-1]);
+	}
+
+	//gets face of card from random value
+	public static String convert(Integer num){
+
+		String[] cards = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+
+		while (num > 13){
+			
+			num = (num - 13);
+		
+		}
+
+		String card = cards[num - 1];
+		return card;
+	}
+
+	//Generates random card without duplicating
+	public static int draw(ArrayList<Integer> drawn){
+
+		Random rand = new Random();
+		int card;
+		int i = 0;
+		card = rand.nextInt(52)+1;
+
+		
+		//Checks if new card has already been played, and if so, is redrawn. This means that there are no duplicate cards played. 
+		//Example : Only 4 aces can exist in a single game
+		while (drawn.contains(card) == true){
+
+			card = rand.nextInt(52)+1;	
+		}
+
+		System.out.println();
+		return(card);
+	}
+
+	//Main game
+	public static void turn(){
+
+		Scanner scan =  new Scanner(System.in);
+		Integer value;
+		int choice = 1;
+		int loss = 0;
+		int turn = 0;
+		ArrayList<Integer> drawn = new ArrayList<Integer>();
+		ArrayList<String> phand = new ArrayList<String>();
+		ArrayList<String> dhand = new ArrayList<String>();
+
+		int total = 0;
+		int dtotal = 0;
+		//dealer intial draw
+		for (int i=0;i!=2;i++){
+
+			value = (draw(drawn));
+			drawn.add(value);
+			dhand.add(convert(value));
+			dtotal = (dtotal + value(value));
+			//	System.out.println("dealer");
+			//	System.out.println(dtotal);
+			//	System.out.println(dhand);
+		}
+		
+
+		//player inital draw	
+
+		value = (draw(drawn));
+		//	System.out.println(value);
+		drawn.add(value);
+		//	System.out.println(drawn);
+		phand.add(convert(value));
+		//	System.out.println(phand);
+		total = (total + value(value));
+		//	System.out.println(total);
+
+		//player turn	
+		while (choice == 1){
+			
+			turn++;
+			System.out.println("Turn "+ turn);
+			System.out.println("	Dealers Hand");
+			System.out.println("	[?, "+(dhand.get(1))+"]");
+			System.out.println("	Hand Total = ?");
+			System.out.println("");
+			
+			System.out.print("	Players Hand");
+			value = (draw(drawn));
+			//		System.out.println(value);
+			drawn.add(value);
+			//		System.out.println(drawn);
+			phand.add(convert(value));
+			System.out.println("	" + phand);
+			total = (total + value(value));
+			System.out.println("	Hand Total = "+total);
+
+			
+			
+			
+			
+			
+			if (total > 21){
+				
+				loss = 1;
+				choice = 0;
+			
+			}else{
+
+				choice=scan.nextInt();
+			}
+		
+		}
+		
+		if (total > 21){
+
+			System.out.println("");
+			System.out.println("Player Bust!");
+
+		}else{
+			
+			System.out.println("");
+			System.out.println("Dealers Turn + Hand Reveal");
+			System.out.println("	Dealers Hand");
+			System.out.println("	" + dhand);
+			System.out.println("	Hand total = " + dtotal);
+			System.out.println("");
+			System.out.println("	Players Hand");
+			System.out.println("	" + phand);
+			System.out.println("	Hand Total = "+total);
+			
+			wait(1500);
+		}
+		
+		if (loss == 0){
+
+			while (dtotal < 17&&dtotal<total){
+
+				value = (draw(drawn));
+				drawn.add(value);
+				dhand.add(convert(value));
+				dtotal = (dtotal + value(value));
+				turn = 0;
+				turn++;
+				System.out.println("Turn " + turn);
+				System.out.println("	Dealers Hand");
+				System.out.println("	" + dhand);
+				System.out.println("	Hand total = " + dtotal);
+				System.out.println("");
+				System.out.println("	Players Hand");
+				System.out.println("	" + phand);
+				System.out.println("	Hand Total = "+total);
+				wait(1500);
+			}
+
+		}
+
+		if (dtotal > total){
+
+			if (dtotal > 21){
+
+				System.out.println("Dealer Bust! Player Wins!");
+
+			}else{
+
+				System.out.println("Dealer Wins!");
+
+			}
+
+		}else{
+
+			if (dtotal==total){
+
+				System.out.println("Tie!");
+
+			}else{
+
+				if (total > 21){
+
+				}else{
+
+					System.out.println("Player Wins!");
+
+				}
+
+			}
+
+		}
+
+	}
+
+// Mastermind ***********************************************************************************************************
 
 	static void help(){
 		Scanner scan = new Scanner(System.in);
@@ -57,6 +271,7 @@ public class Games {
 		}
 		return bot;
 	}
+	
 	
 	static ArrayList<int[]> guesses(ArrayList<Integer> code, int bmode){
 		
@@ -152,244 +367,70 @@ public class Games {
 		return (result);
 	}
 
-	static void customold(ArrayList<Integer> code, int length){
-
-
-		int sum = 0;
-
-		while (sum != (9 * length)) {
-
-			sum = 0;
-
-			ArrayList<Integer> result = new ArrayList<Integer>();
-
-			int[] bot = new int[length];
-
-
-			Scanner scan = new Scanner(System.in);
-
-			System.out.println("input number");
-
-			int pin = scan.nextInt();
-
-			String number = String.valueOf(pin);
-
-			for (int i = 0; i < number.length(); i++) {
-
-				int j = Character.digit(number.charAt(i), 10);
-
-				bot[i] = j;
-
-				System.out.println("digit: " + j);
-			}
-			// FROM HERE DOWN *******************************************************************************
-
-			checker(length, code, bot);
-
-			List<Integer> codetemp = new ArrayList<Integer>(code);
-
-			// int[] bot = {1, 1, 2, 2};
-
-			// all code below this point is cursed, and I have no idea how any
-			// of it works. Good luck Future me
-			// Checking if it matches exact position
-
-
-			// checking if number is in exact spot
-
-			for (int i = 1; i < (length + 1); i++) {
-
-				if (codetemp.get(i - 1) == bot[i - 1]) {
-					System.out.println("2");
-
-
-					bot[i-1] = 9;
-
-
-					result.add(2);
-
-					System.out.println(codetemp);
-				}
-
-			}
-			// checks if it is in
-			for (int i = 1; i < (length + 1); i++) {
-
-				System.out.println("Round: " + i);
-				System.out.println("Guess: " + bot[i - 1]);
-				System.out.println("Checker: " + codetemp);
-				System.out.println("");
-
-				if (codetemp.contains(bot[i - 1])) {
-
-					System.out.println("Contains? : Yes");
-
-					bot[i-1] = 9;
-
-
-					result.add(1);
-
-
-				} else {
-
-					System.out.println("Contains? : False");
-					System.out.println("");
-
-				}
-
-				System.out.println(result);
-			}
-			System.out.println(codetemp);
-			while (result.size() != codetemp.size()) {
-
-				result.add(0);
-
-			}
-
-			Collections.sort(result, Collections.reverseOrder());
-			System.out.println(result);
-			System.out.println(codetemp);
-
-			for (int i = 0; i < codetemp.size(); i++)
-				sum += codetemp.get(i);
-
-		}
-
-		System.out.println("you win!");
-		main(null);
-
-	}
-	//very broken
-	static void bot(ArrayList<Integer> code, int length, int turns) {
-		Random rand = new Random();
-		int sum = 0;
-		int turn = 0;
-		
-		
-		
-		int[]bot = {1, 1, 2, 2};
-		ArrayList<Integer> result = new ArrayList<Integer>();
-		ArrayList<Integer> wrong = new ArrayList<Integer>();
-		
-		int bmode = rand.nextInt(5) + 4;
-		System.out.println("bmode");
-		System.out.println(bmode);
-		
-		
-		while (sum != (length) && turn != turns) {
-
-			turn ++;
-
-			sum = 0;
-
-			
-
-			
-			if (turn ==1){
-
-				
-			}else{
-				
-			 
-				
-				for (int i = 0; i < 4; i++) {
-
-					if(result.get(i)==2){
-						
-						
-					}else{
-				
-					}
-				}
-				
-			}
-			
-			
-			
-			// guessed code
-			int pin = 1;
-			
-			String number = String.valueOf(pin);
-
-			for (int i = 0; i < number.length(); i++) {
-
-				int j = Character.digit(number.charAt(i), 10);
-				bot[i] = j;
-				//System.out.println("digit: " + j);
-			}
-
-			
-			result = (checker(length, code, bot));
-			System.out.println(result);
-			for (int i = 0; i < length; i++){
-
-				if (result.get(i) == 2){
-
-					sum++;
-					//System.out.println(i);
-
-				}
-			}
-		}
-
-		if(sum == length){
-			System.out.println("You Win!");
-			main(null);
-
-		}else{
-			System.out.println("You Loose!");
-			main(null);
-		}
-
-	}
-	//Most Up to date, all other gamemodes are very outdated and need to be updated.
+	
+	
 	static void custom(ArrayList<Integer> code, int length, int turns) { 
-
+		
+		Scanner scan = new Scanner(System.in);
+		
 		int sum = 0;
 		int turn = 0;
+		int pin = 0;
+		int cont = 0;
+		String enter;
+		String check;
 		
 		ArrayList<ArrayList<Integer>> pastres = new ArrayList<ArrayList<Integer>>();
-		
 		ArrayList<ArrayList<Integer>> pastguess = new ArrayList<ArrayList<Integer>>();
 	
-		
-		
 		while (sum != (length) && turn != turns) {
-
+			
 			turn ++;
 
 			sum = 0;
 
-			int[] bot = new int[length];
+			int[] input = new int[length];
 
-			Scanner scan = new Scanner(System.in);
-
-			System.out.println("input number");
-
-			int pin = scan.nextInt();
-
+			System.out.println("");
+			System.out.println("Input guess:");
+			
+			pin = scan.nextInt();
+			
+			if (String.valueOf(pin).length() < length ||String.valueOf(pin).length() > length){
+			
+				while (cont != 1){
+					if (String.valueOf(pin).length() < length ||String.valueOf(pin).length() > length){
+						System.out.println("Invalid input, try again:");
+						pin = scan.nextInt();
+						check = String.valueOf(pin);
+						
+					}else{
+						
+						break;
+					}
+					
+				}
+				
+			}
+			
+			
 			String number = String.valueOf(pin);
-
+			
 			for (int i = 0; i < number.length(); i++) {
 
 				int j = Character.digit(number.charAt(i), 10);
-				bot[i] = j;
+				input[i] = j;
 				//System.out.println("digit: " + j);
 			}
 			
 			ArrayList<Integer> guess = new ArrayList<Integer>();
 			
-			for (int i: bot) {
+			for (int i: input) {
 	            guess.add(Integer.valueOf(i));
 	        }
 			
 			ArrayList<Integer> result = new ArrayList<Integer>();
-			result = (checker(length, code, bot));
-	
-			
-			
-
-			
+			result = (checker(length, code, input));
 			
 			pastres.add(result);
 			pastguess.add(guess);
@@ -410,22 +451,30 @@ public class Games {
 		
 		
 		if(sum == length){
+			
 			System.out.println("You Win!");
+			System.out.println("Press Enter To Continue . . . .");
+			enter = scan.nextLine();
+			enter = scan.nextLine();
 			main(null);
 
 		}else{
 			System.out.println("You Lost!");
+			System.out.println("Press Enter To Continue . . . .");
+			enter = scan.nextLine();
+			enter = scan.nextLine();
 			main(null);
 		}
 
 	}
 
+	
 	static void codegen(int mode) {
 
 		Scanner scan = new Scanner(System.in);
 		Random rand = new Random();
 
-		if (mode == 1) {
+		if (mode == 2) {
 			System.out.println("Custom Mode Setup");
 			System.out.println("Input Code Length:");
 			int length = scan.nextInt();
@@ -443,10 +492,9 @@ public class Games {
 			System.out.println("Generated Code = ");
 			System.out.println(code);
 			custom(code, length, turns);
-
 		}
 
-		if (mode == 2) {
+		if (mode == 3) {
 
 			ArrayList<Integer> code = new ArrayList<Integer>();
 
@@ -456,11 +504,11 @@ public class Games {
 			}
 
 			guesses(code,4);
-			bot(code,4,8);
+			//bot(code,4,8);
 
 		}
 
-		if (mode == 3) {
+		if (mode == 1) {
 
 			ArrayList<Integer> code = new ArrayList<Integer>();
 
@@ -474,6 +522,7 @@ public class Games {
 		}
 	}
 
+	
 	static void rules(){
 		Scanner scan = new Scanner(System.in);
 		String cont;
@@ -494,6 +543,7 @@ public class Games {
 		main(null);
 	}
 	
+	
 	public static void main(String[] args) {
 		
 		int mode;
@@ -501,9 +551,9 @@ public class Games {
 		Scanner scan = new Scanner(System.in);
 
 		System.out.println("Mode");
-		System.out.println("1: Custom Mode");
-		System.out.println("2: Bot Mode");
-		System.out.println("3: Standard"); 
+		System.out.println("1: Standard Mode");
+		System.out.println("2: Custom Mode");
+		System.out.println("3: Bonus Game"); 
 		System.out.println("4: Rules"); 
 		System.out.println("5: Help");
 		System.out.println("*Note: Only custom mode is working correctly right now, and bot mode has not been created yet");
@@ -516,14 +566,53 @@ public class Games {
 		} else {
 
 			while (mode != 1 && mode != 2 && mode != 3 && mode != 4 && mode != 5) {
-				System.out.println("Input");
+				System.out.println("Invalid input, please enter again");
 				mode = scan.nextInt();
 			}
 		}
 		
-		if (mode == 1 || mode == 2 || mode == 3) {
+		if (mode == 1 || mode == 2 ) {
 			codegen(mode);
 		}else{
+			
+			if (mode == 3){
+				
+				String cont;
+				int retry = 1;
+				
+				System.out.println("Black Jack");
+				System.out.println("Black Jack is a well known casino game where players attempt to get as close to the number");
+				System.out.println("21 as possible without going over. Players start with 2 cards, with face cards having a value of");
+				System.out.println("10, and aces having a value of 11. Players will be playing against the dealer, who takes their");
+				System.out.println("turn after the players. If the dealer gets a higher number than the player (without going over 21),");
+				System.out.println("the dealer wins. If the player ends up with a higher number than the dealer, they win. The dealer");
+				System.out.println("will not draw extra cards when the reach a value of 17. ");
+				System.out.println("");
+				System.out.println("Press Enter To Continue. . . .");
+				cont = scan.nextLine();
+				cont = scan.nextLine();
+				
+				System.out.println("Controls:");
+				System.out.println("1 = Draw another card");
+				System.out.println("2 = End Turn");
+				System.out.println("");
+				
+				System.out.println("Press Enter To Start. . . .");
+				cont = scan.nextLine();
+				
+				
+				while (retry == 1){
+
+					turn();
+					System.out.println("Enter 1 to retry");
+					System.out.println("Enter 2 to return to main menu");
+					retry=scan.nextInt();
+					
+				}
+				main(null);
+				
+			}else{
+			
 			if (mode == 4){
 				rules();
 			}else{
@@ -531,6 +620,9 @@ public class Games {
 				help();
 				
 			}
+		
+			}
+		
 		}
 	
 	
