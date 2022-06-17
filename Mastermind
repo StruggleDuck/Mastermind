@@ -220,6 +220,9 @@ public class Games {
 
 // Mastermind ***********************************************************************************************************
 
+
+	
+	
 	static void help(){
 		Scanner scan = new Scanner(System.in);
 		@SuppressWarnings("unused")
@@ -251,56 +254,7 @@ public class Games {
 		cont = scan.nextLine();
 		main(null);
 	}
-	
-	//Unused code for bot
-	static int[]guess(int score, int[] pguess){
-		
-		Random rand = new Random();
-		 
-		int[] bot = new int[4];
-		
-		ArrayList<Integer> guess = new ArrayList<Integer>();
 
-		for (int i = 0; i < 4; i++) {
-
-			bot[i] = (rand.nextInt(6) + 1);	
-			//guess.add(rand.nextInt(6) + 1);
-		}
-		return bot;
-	}
-	
-	//Unused code for bot
-	static ArrayList<int[]> guesses(ArrayList<Integer> code, int bmode){
-		
-		Random rand = new Random();
-		
-		int score = 0;
-		int cont = 0;
-		int [] pguess = {1,1,2,2};
-		int [] n = {0,0,0,0};
-		ArrayList<int[]> guesses = new ArrayList<int[]>();
-	
-		for (int i = 0; i < 5; i++){
-			
-			while (cont == 0){
-				
-				n = guess(score,pguess);
-				
-				
-				
-				cont = 1;
-			}
-			
-		 	pguess = n;
-		 	guesses.add(n);
-			
-		}
-		System.out.println("Guesses:");
-		System.out.println(guesses);
-	
-		return guesses;
-	}
-	
 
 	static void gui(ArrayList<ArrayList<Integer>> pastres, ArrayList<ArrayList<Integer>> pastguess, int turns){
 
@@ -392,7 +346,9 @@ public class Games {
 			System.out.println("");
 			System.out.println("Input guess:");
 			
+			
 			pin = scan.nextInt();
+			
 			
 			if (String.valueOf(pin).length() < length ||String.valueOf(pin).length() > length){
 			
@@ -416,7 +372,7 @@ public class Games {
 			
 			for (int i = 0; i < number.length(); i++) {
 
-				int j = Character.digit(number.charAt(i), 10);
+				int j = Character.digit(number.charAt(i),10);
 				input[i] = j;
 				//System.out.println("digit: " + j);
 			}
@@ -472,40 +428,66 @@ public class Games {
 
 		Scanner scan = new Scanner(System.in);
 		Random rand = new Random();
-
+		
 		if (mode == 2) {
+			
 			System.out.println("Custom Mode Setup");
+			System.out.println("Allow duplicate numbers in code?");
+			System.out.println("1 = No");
+			System.out.println("2 = Yes");
+			int dupe = scan.nextInt();
 			System.out.println("Input Code Length:");
 			int length = scan.nextInt();
+			
+			if (dupe == 1){
+				
+				while (length > 6){
+					
+					System.out.println("Cannot enter code longer than 6 while playing with no duplicate numbers");
+					System.out.println("Input Code Length:");
+					length = scan.nextInt();
+				}
+				
+			}
 			System.out.println("Input Number Of Turns");
 			int turns = scan.nextInt();
 
+		
 			ArrayList<Integer> code = new ArrayList<Integer>();
+			ArrayList<Integer> used = new ArrayList<Integer>();
 
-			for (int i = 0; i < length; i++) {
-
-				code.add(rand.nextInt(6) + 1);
+			if (dupe == 1){
 				
+				for (int i = 0; i < length; i++) {
+					
+					int num = rand.nextInt(6) + 1;
+					
+					while (used.indexOf(num) != -1){
+						System.out.println("Used");
+						num = rand.nextInt(6) + 1;
+					
+					}
+					
+					code.add(num);
+					
+					used.add(num);
 
+				}
+				
+			}else{
+				
+				for (int i = 0; i < length; i++) {
+
+					int num = rand.nextInt(6) + 1;
+					code.add(rand.nextInt(6) + 1);
+				
+				}
+		
 			}
-			System.out.println("Generated Code = ");
-			System.out.println(code);
+			
 			custom(code, length, turns);
 		}
-		// Unused code for bot
-		if (mode == 3) {
-
-			ArrayList<Integer> code = new ArrayList<Integer>();
-
-			for (int i = 0; i < 4; i++) {
-				code.add(rand.nextInt(6) + 1);
-				System.out.println(code);
-			}
-
-			guesses(code,4);
-			//bot(code,4,8);
-
-		}
+		
 
 		if (mode == 1) {
 
@@ -529,6 +511,7 @@ public class Games {
 		System.out.println("--- Rules ---");
 		System.out.println("");
 		System.out.println("Players must try to guess a randomly generated code within a certain number of attempts.");
+		System.out.println("Codes will contain numbers ranging from 1 to 6.");
 		System.out.println("");
 		System.out.println("Upon guessing, the player will be informed of how many numbers they have guessed correctly,");
 		System.out.println("and in the correct position, as well as how many numbers are");
@@ -556,7 +539,6 @@ public class Games {
 		System.out.println("3: Bonus Game"); 
 		System.out.println("4: Rules"); 
 		System.out.println("5: Help");
-		System.out.println("*Note: Only custom mode is working correctly right now, and bot mode has not been created yet");
 		
 		
 		mode = scan.nextInt();
