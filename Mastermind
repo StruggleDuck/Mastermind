@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.Scanner;
 public class Games {
 
+	//Delay method 
 	public static void wait(int ms)
 	{
 	    try
@@ -20,56 +21,59 @@ public class Games {
 	// Blackjack ***********************************************************************************************
 	//gets value of card from random card
 	public static int value(Integer num){
-
+		//coverts 1-52 into 1-13 (for each suit)
 		while (num > 13){
 
 			num = (num - 13);
 
 		}
-
+		//Value of each card
 		int[] cards = {11,2,3,4,5,6,7,8,9,10,10,10,10};
-
+		//return card value
 		return (cards[num-1]);
 	}
 
 	//gets face of card from random value
 	public static String convert(Integer num){
-
+		//Cards display face
 		String[] cards = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
-
+		//converting 1-52 to 1-13 (4 of each card, 1 per face)
 		while (num > 13){
 			
 			num = (num - 13);
 		
 		}
-
+		// return display face of card
 		String card = cards[num - 1];
 		return card;
 	}
 
 	//Generates random card without duplicating
 	public static int draw(ArrayList<Integer> drawn){
-
+		// initate randomizer 
 		Random rand = new Random();
 		int card;
+		
+		//random number from 1-52
 		card = rand.nextInt(52)+1;
 
-		
 		//Checks if new card has already been played, and if so, is redrawn. This means that there are no duplicate cards played. 
 		//Example : Only 4 aces can exist in a single game
 		while (drawn.contains(card) == true){
 
 			card = rand.nextInt(52)+1;	
 		}
-
+		//return value of card
 		System.out.println();
 		return(card);
 	}
 
-	//Main game
+	//Blackjack main game
 	public static void turn(){
-
+		// initiate scanner
 		Scanner scan =  new Scanner(System.in);
+		
+		//declaring variables
 		Integer value;
 		int choice = 1;
 		int loss = 0;
@@ -80,74 +84,70 @@ public class Games {
 
 		int total = 0;
 		int dtotal = 0;
+		
 		//dealer intial draw
 		for (int i=0;i!=2;i++){
-
+			/* 
+			 * value = value of new card drawn
+			 * drawn = cards played
+			 * dhand = dealers hand (display)
+			 * hand = players hand (display)
+			 * dtotal = total value of dealers hand
+			 * total = total value of players hand
+			 */
 			value = (draw(drawn));
 			drawn.add(value);
 			dhand.add(convert(value));
 			dtotal = (dtotal + value(value));
-			//	System.out.println("dealer");
-			//	System.out.println(dtotal);
-			//	System.out.println(dhand);
 		}
 		
 
-		//player inital draw	
+		//player inital draw (first card) (player requires 2 cards at beginning of game)
 
 		value = (draw(drawn));
-		//	System.out.println(value);
 		drawn.add(value);
-		//	System.out.println(drawn);
 		phand.add(convert(value));
-		//	System.out.println(phand);
 		total = (total + value(value));
-		//	System.out.println(total);
 
-		//player turn	
+		//player turn	(loops while player chooses to draw another card)
 		while (choice == 1){
-			
+			//turn counter
 			turn++;
+			//display dealers hand
 			System.out.println("Turn "+ turn);
 			System.out.println("	Dealers Hand");
 			System.out.println("	[?, "+(dhand.get(1))+"]");
 			System.out.println("	Hand Total = ?");
 			System.out.println("");
-			
+			//display players hand + draw second card
 			System.out.print("	Players Hand");
 			value = (draw(drawn));
-			//		System.out.println(value);
 			drawn.add(value);
-			//		System.out.println(drawn);
 			phand.add(convert(value));
 			System.out.println("	" + phand);
 			total = (total + value(value));
 			System.out.println("	Hand Total = "+total);
 
-			
-			
-			
-			
-			
+			//check if player had gone over 21, and if so player looses
 			if (total > 21){
 				
 				loss = 1;
 				choice = 0;
-			
+			//if player has not lost, ask if they want to draw again
 			}else{
 
 				choice=scan.nextInt();
 			}
 		
 		}
-		
+		// if player lost, display player bust
 		if (total > 21){
 
 			System.out.println("");
 			System.out.println("Player Bust!");
 
 		}else{
-			
+			//if player has not lost, initiate dealers turn
 			System.out.println("");
 			System.out.println("Dealers Turn + Hand Reveal");
 			System.out.println("	Dealers Hand");
@@ -157,14 +157,14 @@ public class Games {
 			System.out.println("	Players Hand");
 			System.out.println("	" + phand);
 			System.out.println("	Hand Total = "+total);
-			
+			//1.5 second delay between each of the dealers turns
 			wait(1500);
 		}
 		
 		if (loss == 0){
-
+			// dealer draws till they loose, hit 18, or beat the player
 			while (dtotal < 17&&dtotal<total){
-
+				// dealers turn
 				value = (draw(drawn));
 				drawn.add(value);
 				dhand.add(convert(value));
@@ -183,27 +183,27 @@ public class Games {
 			}
 
 		}
-
+		//check if dealers hand is higher value than players hand
 		if (dtotal > total){
-
+			// if dealer over 21 then dealer busts
 			if (dtotal > 21){
 
 				System.out.println("Dealer Bust! Player Wins!");
 
 			}else{
-
+				// dealer wins if not over 21
 				System.out.println("Dealer Wins!");
 
 			}
 
 		}else{
-
+			// if dealers hand same as player than tie
 			if (dtotal==total){
 
 				System.out.println("Tie!");
 
 			}else{
-
+				// if player hand not over 21, player wins
 				if (total > 21){
 
 				}else{
@@ -222,7 +222,7 @@ public class Games {
 
 
 	
-	
+	// masterming help menu (shows how to understand the games output, and how to play)
 	static void help(){
 		Scanner scan = new Scanner(System.in);
 		@SuppressWarnings("unused")
@@ -252,13 +252,19 @@ public class Games {
 		System.out.println("*Also note that numbers can be repeated inside the code (1111 is a possible code)");
 		System.out.println("Press Enter To Continue . . . .");
 		cont = scan.nextLine();
+		System.out.println("Input");
+		System.out.println("when entering your guess, keep in mind that codes can only contain numbers 1 to 6.");
+		System.out.println("Press Enter To Continue . . . .");
+		cont = scan.nextLine();
+		
+		
 		main(null);
 	}
 
-
+	// Method to display past guesses, most recent guess, and the result of your guesses
 	static void gui(ArrayList<ArrayList<Integer>> pastres, ArrayList<ArrayList<Integer>> pastguess, int turns){
 
-		
+		// outputs each turn 1 at a time, using turn counter to display correct number of turns)
 		for (int i = 0; i<turns;i++){
 			System.out.println("Turn " + (i + 1));
 			System.out.print("	Guess :");
@@ -272,7 +278,7 @@ public class Games {
 		
 	}
 	
-	
+	//Method to get result of players guess, and checking if the guess is same as the code
 	static ArrayList<Integer> checker(int length, ArrayList<Integer> code, int[] bot){
 
 		List<Integer> codetemp = new ArrayList<Integer>(code);
@@ -291,7 +297,7 @@ public class Games {
 				
 			}
 		}
-		// checks if it is in
+		// checks if number is in the code
 		for (int i = 1; i < (length + 1); i++) {
 
 			if (codetemp.contains(bot[i - 1])) {
@@ -303,26 +309,24 @@ public class Games {
 			}
 		}
 
-		
+		//after all numbers checked, add zero for every incorrect number
 		while (result.size() != codetemp.size()) {
 
 			result.add(0);
 
 		}
-
+		// sort the array list so information is not ordered in respect to guess order
 		Collections.sort(result, Collections.reverseOrder());
-		//System.out.println(result);
-		//System.out.println(codetemp);
-		//System.out.println("Ending");
+
 
 		return (result);
 	}
 
-	
+	// main mastermind game (intially just custom gamemode, but now acts as both standard and custom)
 	static void custom(ArrayList<Integer> code, int length, int turns) { 
-		
+		//initate scanner
 		Scanner scan = new Scanner(System.in);
-		
+		//declaring variables
 		int sum = 0;
 		int turn = 0;
 		int pin = 0;
@@ -332,9 +336,11 @@ public class Games {
 		@SuppressWarnings("unused")
 		String check;
 		
+		// array lists tracking previous guesses and results
 		ArrayList<ArrayList<Integer>> pastres = new ArrayList<ArrayList<Integer>>();
 		ArrayList<ArrayList<Integer>> pastguess = new ArrayList<ArrayList<Integer>>();
 	
+		//while guess is not the same as code, and player still has turns remaining loop
 		while (sum != (length) && turn != turns) {
 			
 			turn ++;
@@ -346,10 +352,10 @@ public class Games {
 			System.out.println("");
 			System.out.println("Input guess:");
 			
-			
+			//get player guess
 			pin = scan.nextInt();
 			
-			
+			// if guess is not same length as code then ask again for input
 			if (String.valueOf(pin).length() < length ||String.valueOf(pin).length() > length){
 			
 				while (cont != 1){
@@ -367,7 +373,7 @@ public class Games {
 				
 			}
 			
-			
+			// converting input into array list
 			String number = String.valueOf(pin);
 			
 			for (int i = 0; i < number.length(); i++) {
@@ -384,13 +390,15 @@ public class Games {
 	        }
 			
 			ArrayList<Integer> result = new ArrayList<Integer>();
-			result = (checker(length, code, input));
 			
+			//check guess against generated code
+			result = (checker(length, code, input));
+			//add guess and results to trackers
 			pastres.add(result);
 			pastguess.add(guess);
-			
+			//display guesses and results
 			gui(pastres,pastguess, turn);
-			
+			//if all positions in guess contain numbers in correct position, then end loop
 			for (int i = 0; i < length; i++){
 
 				if (result.get(i) == 2){
@@ -403,7 +411,7 @@ public class Games {
 		}
 		
 		
-		
+		// if loop ended by guess containing numbers in correct position, than player wins
 		if(sum == length){
 			
 			System.out.println("You Win!");
@@ -412,6 +420,7 @@ public class Games {
 			enter = scan.nextLine();
 			main(null);
 
+		// if not, player looses
 		}else{
 			System.out.println("You Lost!");
 			System.out.println("The Correct Code Was : " + code);
@@ -423,22 +432,22 @@ public class Games {
 
 	}
 
-	
+	//method for generating a random code, based off of selected gamemode
 	static void codegen(int mode) {
-
+		// initating scanner and randomzier
 		Scanner scan = new Scanner(System.in);
 		Random rand = new Random();
-		
+		//if selected mode is 2, enter custom mode
 		if (mode == 2) {
 			
-			System.out.println("Custom Mode Setup");
-			System.out.println("Allow duplicate numbers in code?");
+			System.out.println("Custom Mode Setup");  //self explaining code
+			System.out.println("Allow duplicate numbers in code?"); 
 			System.out.println("1 = No");
 			System.out.println("2 = Yes");
 			int dupe = scan.nextInt();
 			System.out.println("Input Code Length:");
 			int length = scan.nextInt();
-			
+			// cannot generate code longer than 6 without duplicate numbers (6 length code uses every possible number)
 			if (dupe == 1){
 				
 				while (length > 6){
@@ -455,7 +464,7 @@ public class Games {
 		
 			ArrayList<Integer> code = new ArrayList<Integer>();
 			ArrayList<Integer> used = new ArrayList<Integer>();
-
+			// generate code with no duplicate numbers
 			if (dupe == 1){
 				
 				for (int i = 0; i < length; i++) {
@@ -473,7 +482,7 @@ public class Games {
 					used.add(num);
 
 				}
-				
+			// generate code with duplicate numbers
 			}else{
 				
 				for (int i = 0; i < length; i++) {
@@ -484,11 +493,11 @@ public class Games {
 				}
 		
 			}
-			
+			//start game
 			custom(code, length, turns);
 		}
 		
-
+		//standard game mode, generates code with duplicates and uses default perams
 		if (mode == 1) {
 
 			ArrayList<Integer> code = new ArrayList<Integer>();
@@ -503,7 +512,7 @@ public class Games {
 		}
 	}
 
-	
+	//Shows rules of mastermind
 	static void rules(){
 		Scanner scan = new Scanner(System.in);
 		@SuppressWarnings("unused")
@@ -526,13 +535,13 @@ public class Games {
 		main(null);
 	}
 	
-	
+	//Main menu
 	public static void main(String[] args) {
 		
 		int mode;
 
 		Scanner scan = new Scanner(System.in);
-
+		//showing player availible options
 		System.out.println("Mode");
 		System.out.println("1: Standard Mode");
 		System.out.println("2: Custom Mode");
@@ -540,9 +549,9 @@ public class Games {
 		System.out.println("4: Rules"); 
 		System.out.println("5: Help");
 		
-		
+		//get player choice
 		mode = scan.nextInt();
-
+		// if player input is not one of the availible choices, then get input again
 		if (mode == 1 || mode == 2 || mode == 3 || mode == 4 || mode == 5) {
 
 		} else {
@@ -556,7 +565,7 @@ public class Games {
 		if (mode == 1 || mode == 2 ) {
 			codegen(mode);
 		}else{
-			
+			//if player selects bonus game, display rules of blackjack then start blackjack
 			if (mode == 3){
 				@SuppressWarnings("unused")
 				String cont;
@@ -582,7 +591,7 @@ public class Games {
 				System.out.println("Press Enter To Start. . . .");
 				cont = scan.nextLine();
 				
-				
+				//if player chooses to play again, restart blackjack
 				while (retry == 1){
 
 					turn();
@@ -591,6 +600,7 @@ public class Games {
 					retry=scan.nextInt();
 					
 				}
+				//when player decides to stop playing blackjack, return to main menu
 				main(null);
 				
 			}else{
